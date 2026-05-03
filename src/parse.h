@@ -16,15 +16,15 @@
 
 typedef uint8_t CC4BParseStateType;
 
-#define CC4B_TOT_INC    ((CC4BParseStateType) 0)
-#define CC4B_TOT_SET    ((CC4BParseStateType) 1)
+#define CC4B_TST_INC    ((CC4BParseStateType) 0)
+#define CC4B_TST_SET    ((CC4BParseStateType) 1)
 
-typedef uint8_t CC4BTapeOperationType;
+typedef uint8_t CC4BTapeSlotType;
 
 typedef struct {
-    CC4BTapeOperationType type;
+    CC4BTapeSlotType type;
     uint8_t value;
-} CC4BTapeOperation;
+} CC4BTapeSlot;
 
 typedef struct {
     CC4BIRNode *head;
@@ -42,6 +42,7 @@ typedef struct {
 } CC4BParseState;
 
 CC4B_API Result cc4b_parseinit(CC4BParseState *state);
-CC4B_API Result cc4b_parsestep(CC4BParseState *state, char ch);
+CC4B_API Result cc4b_parsestep(CC4BParseState *state, unsigned char ch);
+CC4B_API CC4BIRNode *cc4b_parseend(CC4BParseState *state);
 
 #endif

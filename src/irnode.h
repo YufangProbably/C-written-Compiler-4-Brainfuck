@@ -23,7 +23,13 @@ typedef struct CC4BIRNode {
     union {
         struct CC4BIRNode *block;
         FlatHashMap *pending;
-        ptfdiff_t offset;
+        ptrdiff_t offset;
+
+        struct {
+            uint8_t mult;
+            ptrdiff_t source, target;
+        } mad;
+
         struct {
             uint8_t code;
             int32_t a, b, c, d;

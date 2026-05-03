@@ -35,7 +35,9 @@ function Build-Test {
     foreach ($testFile in $testFiles) {
         $output = "bin/test/$($testFile.BaseName).exe"
         gcc $testFile.FullName $srcFiles.FullName -o $output `
-            -I test -I src -I lib -D CC4B_STATIC
+            -I test -I src -I lib `
+            -D CC4B_STATIC `
+            -D CC4B_DEBUG_DUMP
         if ($LASTEXITCODE -ne 0) { $allSuccess = $false }
     }
     return $allSuccess
@@ -66,11 +68,5 @@ switch ($Work) {
     "build-dll" { Build-DLL | Out-Null; break }
     "build-main" { Build-Main | Out-Null; break }
     "build-test" { Build-Test | Out-Null; break }
-
-    "test" {
-        $result = Build-Test
-        if (-not $result) { break }
-        Run-Test
-        break
-    }
+    "run-test" { Run-Test; break }
 }
