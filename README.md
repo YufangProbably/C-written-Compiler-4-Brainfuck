@@ -13,8 +13,8 @@ C-written Compiler 4 Brainfuck (CC4B) is a brainfuck to Bytecode Compiler with a
 
 ```powershell
 # Clone the repository
-git clone https://github.com/YufangProbably/C-Compiler-4-Brainfuck.git
-cd C-Compiler-4-Brainfuck
+git clone https://github.com/YufangProbably/C-written-Compiler-4-Brainfuck.git
+cd C-written-Compiler-4-Brainfuck
 
 # Run tests
 .\please.ps1 build-test
