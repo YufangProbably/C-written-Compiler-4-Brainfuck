@@ -5,11 +5,11 @@
 #include <assert.h>
 #include <stdlib.h>
 
-typedef void (*TestFunction)(void);
+typedef void (*TestFunc)(void);
 
 typedef struct {
     const char *name;
-    TestFunction func;
+    TestFunc func;
 } TestCase;
 
 #define MAX_TESTS 256

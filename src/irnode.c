@@ -1,25 +1,25 @@
 #include <stdlib.h>
 #include "irnode.h"
 
-IRNode *irnodenew(IRNode *after, IRNodeKind kind) {
-    IRNode *irnode = malloc(sizeof(IRNode));
-    if (irnode == NULL) return NULL;
+CC4BIRNode *cc4b_irnodenew(CC4BIRNode *after, CC4BIRNodeKind kind) {
+    CC4BIRNode *node = malloc(sizeof(CC4BIRNode));
+    if (node == NULL) return NULL;
 
-    irnode->kind = kind;
-    if (after != NULL) after->next = irnode;
+    node->kind = kind;
+    if (after != NULL) after->next = node;
 
-    return irnode;
+    return node;
 }
 
-void irnodekill(IRNode *head) {
-    IRNode *this = head, *next;
+void cc4b_irnodekill(CC4BIRNode *head) {
+    CC4BIRNode *this = head, *next;
     while (this != NULL) {
         next = this->next;
 
-        if (this->kind == IK_LOOP)
-            irnodekill(this->block);
-        else if (this->kind == IK_TAPEINC)
-            uhmapkill(this->tape);
+        if (this->kind == CC4B_IK_LOOP)
+            cc4b_irnodekill(this->args.block);
+        else if (this->kind == CC4B_IK_TAPEINC)
+            fhmapkill(this->tape);
         free(this);
 
         this = next;

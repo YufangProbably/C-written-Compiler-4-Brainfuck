@@ -2,35 +2,36 @@
 #define IRNODE_CC4B_H
 
 #include <stdint.h>
-#include "collection/uhmap.h"
+#include "collection/fhmap.h"
 #include "opcode.h"
 
-#define IK_NOP          ((IRNodeKind) 0)
-#define IK_LOOP         ((IRNodeKind) 1)
-#define IK_TAPEINC      ((IRNodeKind) 2)
-#define IK_MOV          ((IRNodeKind) 3)
-#define IK_MAD          ((IRNodeKind) 4)
-#define IK_GET          ((IRNodeKind) 5)
-#define IK_PUT          ((IRNodeKind) 6)
-#define IK_PATTERN      ((IRNodeKind) 7)
+#define CC4B_IK_NOP          ((CC4BIRNodeKind) 0)
+#define CC4B_IK_LOOP         ((CC4BIRNodeKind) 1)
+#define CC4B_IK_TAPEINC      ((CC4BIRNodeKind) 2)
+#define CC4B_IK_MOV          ((CC4BIRNodeKind) 3)
+#define CC4B_IK_MAD          ((CC4BIRNodeKind) 4)
+#define CC4B_IK_GET          ((CC4BIRNodeKind) 5)
+#define CC4B_IK_PUT          ((CC4BIRNodeKind) 6)
+#define CC4B_IK_PATTERN      ((CC4BIRNodeKind) 7)
 
-typedef uint8_t IRNodeKind;
+typedef uint8_t CC4BIRNodeKind;
 
-typedef struct IRNode {
-    IRNodeKind kind;
-    struct IRNode *next;
+typedef struct CC4BIRNode {
+    CC4BIRNodeKind kind;
+    struct CC4BIRNode *next;
 
     union {
-        struct IRNode *block;
-        UnorderedHashMap *tape;
+        struct CC4BIRNode *block;
+        FlatHashMap *pending;
+        ptfdiff_t offset;
         struct {
-            uint8_t opcode;
+            uint8_t code;
             int32_t a, b, c, d;
-        } args;
-    };
-} IRNode;
+        } pattern;
+    } data;
+} CC4BIRNode;
 
-IRNode *irnodenew(IRNode *after, IRNodeKind kind);
-void irnodekill(IRNode *irnode);
+CC4BIRNode *cc4b_irnodenew(CC4BIRNode *after, CC4BIRNodeKind kind);
+void cc4b_irnodekill(CC4BIRNode *irnode);
 
 #endif

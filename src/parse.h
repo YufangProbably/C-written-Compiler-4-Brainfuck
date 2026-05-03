@@ -3,31 +3,45 @@
 
 #include "collection/result.h"
 #include "collection/vector.h"
-#include "collection/uhmap.h"
+#include "collection/fhmap.h"
 #include "exports.h"
 #include "irnode.h"
 
-#define ICT_NOP         ((InstrCharType) 0)
-#define ICT_TAPEINC     ((InstrCharType) 1)
-#define ICT_OPEN        ((InstrCharType) 2)
-#define ICT_END         ((InstrCharType) 3)
-#define ICT_IO          ((InstrCharType) 4)
+#define CC4B_PST_NOP    ((CC4BParseStateType) 0)
+#define CC4B_PST_IGNORE ((CC4BParseStateType) 1)
+#define CC4B_PST_TAPE   ((CC4BParseStateType) 2)
+#define CC4B_PST_OPEN   ((CC4BParseStateType) 3)
+#define CC4B_PST_END    ((CC4BParseStateType) 4)
+#define CC4B_PST_IO     ((CC4BParseStateType) 5)
 
-typedef uint8_t InstrCharType;
+typedef uint8_t CC4BParseStateType;
+
+#define CC4B_TOT_INC    ((CC4BParseStateType) 0)
+#define CC4B_TOT_SET    ((CC4BParseStateType) 1)
+
+typedef uint8_t CC4BTapeOperationType;
 
 typedef struct {
-    IRNode *head;
-    IRNode *this;
-    IRNode *loop_head;
-    Vector *loop_stack;
+    CC4BTapeOperationType type;
+    uint8_t value;
+} CC4BTapeOperation;
 
-    InstrCharType last_type;
+typedef struct {
+    CC4BIRNode *head;
+    CC4BIRNode *this;
+    Vector *brackets;
+    CC4BParseStateType type;
 
-    UnorderedHashMap *tape;
-    ptrdiff_t offset;
+    union {
+        struct {
+            FlatHashMap *pending;
+            ptrdiff_t offset;
+        } tape;
+        uint32_t skip_depth;
+    } ctx;
 } CC4BParseState;
 
-CC4B_API Result cc4bparse_init(CC4BParseState *state);
-CC4B_API Result cc4bparse_step(CC4BParseState *state, char ch);
+CC4B_API Result cc4b_parseinit(CC4BParseState *state);
+CC4B_API Result cc4b_parsestep(CC4BParseState *state, char ch);
 
 #endif

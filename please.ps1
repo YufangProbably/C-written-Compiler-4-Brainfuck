@@ -4,29 +4,29 @@ param(
 
 function Build-DLL {
     New-Item -Force -ItemType Directory bin | Out-Null
-    Remove-Item bin/cc4b.dll -Recurse -Force
+    Remove-Item bin/cc4b.dll -Recurse -Force -ErrorAction SilentlyContinue
 
     $srcFiles = Get-ChildItem -Recurse src, lib -Filter *.c
 
     gcc $srcFiles.FullName -o bin/cc4b.dll `
-        -I src -I lib -shared -D CC4B_EXPORT
+        -I src -I lib -shared -D CC4B_EXPORT -O2
     return $LASTEXITCODE -eq 0
 }
 
 function Build-Main {
     New-Item -Force -ItemType Directory bin | Out-Null
-    Remove-Item bin/cc4b.exe -Recurse -Force
+    Remove-Item bin/cc4b.exe -Recurse -Force -ErrorAction SilentlyContinue
 
     $srcFiles = Get-ChildItem -Recurse main, lib -Filter *.c
 
     gcc $srcFiles.FullName -o bin/cc4b.exe `
-        -I main -I src -I lib -L . -l bin/cc4b
+        -I main -I src -I lib -L . -l bin/cc4b -O2
     return $LASTEXITCODE -eq 0
 }
 
 function Build-Test {
     New-Item -Force -ItemType Directory bin/test | Out-Null
-    Remove-Item bin/test/* -Recurse -Force
+    Remove-Item bin/test/* -Recurse -Force -ErrorAction SilentlyContinue
 
     $srcFiles = Get-ChildItem -Recurse src, lib -Filter *.c
     $testFiles = Get-ChildItem -Recurse test -Filter *.c
