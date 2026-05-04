@@ -1,6 +1,8 @@
 #ifndef PARSE_CC4B_H
 #define PARSE_CC4B_H
 
+#include <stdint.h>
+#include <stddef.h>
 #include "collection/result.h"
 #include "collection/vector.h"
 #include "collection/fhmap.h"

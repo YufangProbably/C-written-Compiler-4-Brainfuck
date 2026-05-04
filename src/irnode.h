@@ -2,6 +2,7 @@
 #define IRNODE_CC4B_H
 
 #include <stdint.h>
+#include <stddef.h>
 #include "collection/fhmap.h"
 #include "opcode.h"
 

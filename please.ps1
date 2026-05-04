@@ -26,20 +26,37 @@ function Build-Main {
 
 function Build-Test {
     New-Item -Force -ItemType Directory bin/test | Out-Null
+    New-Item -Force -ItemType Directory bin/obj | Out-Null
     Remove-Item bin/test/* -Recurse -Force -ErrorAction SilentlyContinue
 
     $srcFiles = Get-ChildItem -Recurse src, lib -Filter *.c
     $testFiles = Get-ChildItem -Recurse test -Filter *.c
 
+    $staticLib = "bin/cc4b.lib"
+
+    $objFiles = @()
+    foreach ($file in $srcFiles) {
+        $obj = "bin/obj/$($file.BaseName).o"
+        gcc -c $file.FullName -o $obj `
+            -I src -I lib `
+            -D CC4B_STATIC -D CC4B_DEBUG_DUMP
+        if ($LASTEXITCODE -ne 0) { return $false }
+        $objFiles += $obj
+    }
+
+    $staticLib = "bin/cc4b_test.lib"
+    ar rcs $staticLib $objFiles
+    Remove-Item bin/obj -Recurse -Force
+
     $allSuccess = $true
     foreach ($testFile in $testFiles) {
-        $output = "bin/test/$($testFile.BaseName).exe"
-        gcc $testFile.FullName $srcFiles.FullName -o $output `
+        $test = "bin/test/$($testFile.BaseName).exe"
+        gcc $testFile.FullName $staticLib -o $test `
             -I test -I src -I lib `
-            -D CC4B_STATIC `
-            -D CC4B_DEBUG_DUMP
+            -D CC4B_STATIC -D CC4B_DEBUG_DUMP
         if ($LASTEXITCODE -ne 0) { $allSuccess = $false }
     }
+    Remove-Item $staticLib
     return $allSuccess
 }
 
@@ -49,6 +66,7 @@ function Run-Test {
     $passedCount = 0
     $failedCount = 0
     foreach ($test in $tests) {
+        Write-Host "`n* Running '$($test.BaseName)'...`n" -ForegroundColor Cyan
         & $test.FullName
         if ($LASTEXITCODE -eq 0) { $passedCount++ }
         else { $failedCount++ }
@@ -69,4 +87,9 @@ switch ($Work) {
     "build-main" { Build-Main | Out-Null; break }
     "build-test" { Build-Test | Out-Null; break }
     "run-test" { Run-Test; break }
+
+    default {
+        Write-Host "Work '$Work' not found" -ForegroundColor Red
+        break
+    }
 }

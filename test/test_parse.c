@@ -19,4 +19,5 @@ TEST(parse_simple) {
     CC4BIRNode *node = cc4b_parseend(&state);
 
     cc4b_irnodedump(node, 0);
+    cc4b_irnodekill(node);
 }

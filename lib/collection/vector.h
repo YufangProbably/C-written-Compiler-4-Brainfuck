@@ -21,7 +21,7 @@ Result vecat(Vector *vec, ptrdiff_t index, void *elem);
 Result vecset(Vector *vec, ptrdiff_t index, void *elem);
 Result vecpush(Vector *vec, void *elem);
 Result vecpop(Vector *vec, void *elem);
-Vector *vecdup(Vector *vec);
+Vector *vecdup(Vector *origin);
 Vector *vecsub(Vector *vec, ptrdiff_t start, size_t length);
 Result vecext(Vector *source, Vector *target);
 Vector *veccat(Vector *left, Vector *right);

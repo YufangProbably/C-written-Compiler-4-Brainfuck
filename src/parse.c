@@ -1,8 +1,6 @@
 #include <stdlib.h>
 #include "parse.h"
 
-#include <stdio.h>
-
 static const CC4BParseStateType _state_map[256] = {
     ['+'] = CC4B_PST_TAPE,
     [','] = CC4B_PST_IO,

@@ -2,6 +2,7 @@
 #ifndef DUMP_CC4B_H
 #define DUMP_CC4B_H
 
+#include <stddef.h>
 #include "irnode.h"
 
 void cc4b_irnodedump(CC4BIRNode *head, size_t indent);
